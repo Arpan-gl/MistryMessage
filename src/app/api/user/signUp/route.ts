@@ -12,8 +12,9 @@ export async function POST(req:NextRequest){
         const userExistAndVerified = await userModel.findOne({username:username,isVerified:true});
         if(userExistAndVerified) return NextResponse.json({message:"User already exist and verified"},{status:404});
         
-        const userExistByEmail = await userModel.findOne({email});
+        const userExistByEmail = await userModel.findOne({email:email});
         const verifyCode = Math.floor(100000 + Math.random()*900000).toString();
+
         if(userExistByEmail){
             if(userExistByEmail.isVerified){
                 return NextResponse.json({
@@ -30,8 +31,7 @@ export async function POST(req:NextRequest){
                 await userExistByEmail.save();
             }
         } else {
-            const salt = bcrypt.getSalt("10");
-            const hashPassword = await bcrypt.hash(password,salt);
+            const hashPassword = await bcrypt.hash(password,10);
             const expiryDate = new Date();
             expiryDate.setHours(expiryDate.getHours() + 1);
 
