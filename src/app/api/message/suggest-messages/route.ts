@@ -16,7 +16,9 @@ export async function GET() {
       prompt:prompt
     });
   
-    return result.toDataStreamResponse();
+    return Response.json({
+      data:result.toDataStreamResponse()
+    });
   } catch (error) {
     if(error instanceof OpenAI.APIError){
         const {name,status,headers,message} = error;
