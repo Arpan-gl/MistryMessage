@@ -75,7 +75,7 @@ export async function GET(){
         }
         return Response.json({
             success:true,
-            isAcceptingMessages:foundUser.isAcceptingMessage,
+            isAcceptingMessage:foundUser.isAcceptingMessage,
         },{status:201});
     } catch (error) {
         console.error(error);
