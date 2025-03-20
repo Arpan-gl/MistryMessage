@@ -1,14 +1,14 @@
 import { dbConnection } from "@/lib/DBConnection";
 import { userModel } from "@/models/User.models";
-import { authOptions } from "../../user/auth/[...nextauth]/options";
+import { auth } from "@/app/api/auth/[...nextauth]/options";
 import { User } from "next-auth";
-import {getServerSession} from "next-auth";
 import mongoose from "mongoose";
 
 export async function GET(){
     await   dbConnection();
-    const session = await getServerSession(authOptions);
-    const user:User = session?.user;
+    const session = await auth();
+    const user = session?.user as User | undefined;
+    
     if(!session || !session.user){
         return Response.json({
             success:false,
@@ -16,7 +16,7 @@ export async function GET(){
         },{status:401});
     }
 
-    const userId = new mongoose.Types.ObjectId(user._id);
+    const userId = new mongoose.Types.ObjectId(user?._id);
 
     try {
         const user = await userModel.aggregate([

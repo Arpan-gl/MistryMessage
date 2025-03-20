@@ -5,8 +5,9 @@ import { userModel } from "@/models/User.models";
 import { User,Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import { user } from "@/models/User.models";
+import NextAuth from "next-auth";
 
-export const authOptions = {
+export const {auth,signIn,signOut} = NextAuth({
     providers:[
         Credentials({
             id:"credentials",
@@ -70,4 +71,4 @@ export const authOptions = {
         strategy:"jwt" as const
     },
     secret:process.env.NEXTAUTH_SECRET
-}; 
+}); 

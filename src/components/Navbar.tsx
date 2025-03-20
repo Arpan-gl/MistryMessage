@@ -1,33 +1,38 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
-import { useSession,signOut } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { User } from 'next-auth';
 import { Button } from './ui/button';
 
 const Navbar = () => {
-    const {data:session} = useSession();
-    const user = session?. user as User;
+    const { data: session } = useSession();
+    const user = session?.user as User;
 
-  return (
-    <nav className='container mx-auto flex flex-col md:flex-row justify-between items-center'>
-        <a className='text-xl font-bold mb-4 md:mb-0' href="#">Mystry Message</a>
-        {
-            session? (
-                <>
-                <span className='mr-4'>
-                    Welcome, {user?.username || user?.email}
-                </span>
-                <Button className='w-full md:w-auto' onClick={() => signOut()}>Logout</Button>
-                </>
-            ) : (
-                <Link href="/signIn">
-                    <Button className='w-full md:w-auto'>Sign In</Button>
-                </Link>
-            )
-        }
-    </nav>
-  )
+    return (
+        <nav className='container mx-auto flex flex-col md:flex-row justify-between items-center'>
+            <a className='text-xl font-bold mb-4 md:mb-0' href="#">Mystry Message</a>
+            {
+                session ? (
+                    <>
+                        <span className='mr-4'>
+                            Welcome, {user?.username || user?.email}
+                        </span>
+                        <Button className='w-full md:w-auto' onClick={() => signOut()}>Logout</Button>
+                    </>
+                ) : (
+                    <div className='flex flex-col md:flex-row gap-4 mx-1'>
+                        <Link href="/signIn">
+                            <Button className='w-full md:w-auto'>Sign In</Button>
+                        </Link>
+                        <Link href="/signUp">
+                            <Button className='w-full md:w-auto'>Sign Up</Button>
+                        </Link>
+                    </div>
+                )
+            }
+        </nav>
+    )
 }
 
 export default Navbar;

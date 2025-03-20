@@ -1,14 +1,13 @@
 import { dbConnection } from "@/lib/DBConnection";
-import {getServerSession} from "next-auth";
-import { authOptions } from "../../user/auth/[...nextauth]/options";
+import { auth } from "@/app/api/auth/[...nextauth]/options";
 import { userModel } from "@/models/User.models";
 import { User } from "next-auth";
 
 export async function POST(req:Request){
     await dbConnection();
 
-    const session = await getServerSession(authOptions);
-    const user:User = session?.user;
+    const session = await auth();
+    const user = session?.user as User | undefined;
 
     if(!session || !session.user){
         return Response.json({
@@ -17,7 +16,7 @@ export async function POST(req:Request){
         },{status:401});
     }
 
-    const userId = user._id;
+    const userId = user?._id;
     const {acceptMessages} = await req.json();
 
     try {
@@ -53,8 +52,8 @@ export async function POST(req:Request){
 export async function GET(){
     await dbConnection();
 
-    const session = await getServerSession(authOptions);
-    const user:User = session?.user;
+    const session = await auth();
+    const user = session?.user as User | undefined;
 
     if(!session || !session.user){
         return Response.json({
@@ -63,7 +62,7 @@ export async function GET(){
         },{status:401});
     }
 
-    const userId = user._id;
+    const userId = user?._id;
 
     try {
         const foundUser = await userModel.findById(userId);

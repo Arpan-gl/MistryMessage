@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, RefreshCcw } from "lucide-react";
-import MessageCard from "@/components/MessageCard";
+import { MessageCard } from "@/components/MessageCard";
 import { User } from "next-auth";
 
 const page = () => {
