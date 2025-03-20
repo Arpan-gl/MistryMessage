@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -10,13 +11,13 @@ export async function GET() {
 
     const result = await model.generateContent(prompt);
 
-    return Response.json({
+    return NextResponse.json({
       success: true,
       data: result.response.text()
     }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return Response.json({
+    return NextResponse.json({
       success: false,
       message: "Failed to generate questions"
     }, { status: 500 });

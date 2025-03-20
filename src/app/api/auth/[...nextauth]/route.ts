@@ -1,5 +1,5 @@
 import { auth } from "./options";
 
-const handle = auth;
+export const runtime = 'edge';
 
-export {handle as GET,handle as POST};
+export { auth as GET, auth as POST };

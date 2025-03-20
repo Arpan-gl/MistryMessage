@@ -3,6 +3,7 @@ import { userModel } from "@/models/User.models";
 import { auth } from "@/app/api/auth/[...nextauth]/options";
 import { User } from "next-auth";
 import mongoose from "mongoose";
+import { NextResponse } from "next/server";
 
 export async function GET(){
     await   dbConnection();
@@ -10,7 +11,7 @@ export async function GET(){
     const user = session?.user as User | undefined;
     
     if(!session || !session.user){
-        return Response.json({
+        return NextResponse.json({
             success:false,
             message:"Not Authenticated"
         },{status:401});
@@ -26,18 +27,18 @@ export async function GET(){
             {$group:{_id:"$_id",messages:{$push:"$messages"}}}
         ]);
         if(!user || user.length === 0){
-            return Response.json({
+            return NextResponse.json({
                 success:false,
                 message:"User not found"
             },{status:401});
         }
-        return Response.json({
+        return NextResponse.json({
             success:true,
             messages:user[0].messages
         },{status:200});
     } catch (error) {
         console.error(error);
-        return Response.json({
+        return NextResponse.json({
             success:false,
             message:"Can't get message from the user"
         },{status:500});

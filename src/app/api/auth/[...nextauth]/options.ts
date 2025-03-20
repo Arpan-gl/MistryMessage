@@ -7,7 +7,7 @@ import { JWT } from "next-auth/jwt";
 import { user } from "@/models/User.models";
 import NextAuth from "next-auth";
 
-export const {auth,signIn,signOut} = NextAuth({
+export const auth = NextAuth({
     providers:[
         Credentials({
             id:"credentials",
@@ -19,12 +19,12 @@ export const {auth,signIn,signOut} = NextAuth({
             async authorize(credentials):Promise<user | any>{
                 await dbConnection();
                 try {
-                    const userExistByEmail = await userModel.findOne({email:credentials.email});
+                    const userExistByEmail = await userModel.findOne({email:credentials?.email});
                     if(!userExistByEmail){
-                        throw new Error("No user find with this email");
+                        return null;
                     }
-                    if(userExistByEmail.isVerified){
-                        throw new Error("Please Verify Your account first");
+                    if(!userExistByEmail.isVerified){
+                        return null;
                     }
 
                     const verifyPassword = await bcrypt.compare(
@@ -32,14 +32,11 @@ export const {auth,signIn,signOut} = NextAuth({
                         userExistByEmail.password
                     );
                     if(!verifyPassword){
-                        throw new Error("Please give valid password");
+                        return null;
                     }
                     return userExistByEmail;
-                } catch (error: unknown) {
-                    if (error instanceof Error) {
-                        throw new Error(error.message);
-                    }
-                    throw new Error('An unknown error occurred');
+                } catch (error) {
+                    return null;
                 }
             }
         })
@@ -65,10 +62,12 @@ export const {auth,signIn,signOut} = NextAuth({
         }
     },
     pages:{
-        signIn:"/signIn"
+        signIn:"/signIn",
+        signOut:"/signOut",
+        error:"/error",
     },
     session:{
         strategy:"jwt" as const
     },
     secret:process.env.NEXTAUTH_SECRET
-}); 
+});

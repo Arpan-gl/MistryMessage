@@ -68,8 +68,8 @@ const userSchema:Schema<user> = new Schema({
     messages:[messageSchema]
 },{timestamps:true});
 
-const messageModel = (mongoose.models.Message as mongoose.Model<message>) || mongoose.model("Message",messageSchema);
-const userModel = (mongoose.models.User as mongoose.Model<user>) || mongoose.model("User",userSchema);
+// const messageModel = (mongoose.models. as mongoose.Model<message>) || mongoose.model("Message",messageSchema);
+const userModel = mongoose.model("User",userSchema);
 
 export {userModel};
-export {messageModel};
+// export {messageModel};
